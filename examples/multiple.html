@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Example: Simple</title>
+    <title>Example: Multiple</title>
     <style>
       body {
         text-align: center;
@@ -25,33 +25,10 @@
         flex: 1;
         border: 1px solid #666;
         margin: 3px;
-        overflow: hidden;
 
-        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
-
-        cursor: crosshair;
-      }
-
-      .container:focus {
-        outline: 0;
-        border-color: #09f;
-      }
-
-      #hline {
-        position: absolute;
-        height: 1px;
-        width: 100%;
-        background: #474747;
-      }
-
-      #vline {
-        position: absolute;
-        width: 1px;
-        height: 100%;
-        background: #474747;
       }
     </style>
     <script src="../dist/input.js"></script>
@@ -59,11 +36,9 @@
   </head>
 
   <body>
-    <h2>Simple</h2>
-    <div id="input" class="container" tabindex="-1">
-      <div id="hline"></div>
-      <div id="vline"></div>
-    </div>
+    <h2>Multiple</h2>
+    <div id="input-01" class="container"></div>
+    <div id="input-02" class="container"></div>
     <script>
       'use strict';
 
@@ -74,15 +49,10 @@
       memStats.domElement.style.zIndex = 10;
       document.body.appendChild(memStats.domElement);
 
-      let input = new Input(document.getElementById('input'));
-      let vline = document.getElementById('vline');
-      let hline = document.getElementById('hline');
+      let input = new Input();
 
       function animate() {
         input.reset();
-
-        vline.style.left = `${input.mouseX}px`;
-        hline.style.top = `${input.mouseY}px`;
 
         memStats.update();
         requestAnimationFrame(animate);

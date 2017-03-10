@@ -25,33 +25,16 @@
         flex: 1;
         border: 1px solid #666;
         margin: 3px;
-        overflow: hidden;
 
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
-
-        cursor: crosshair;
       }
 
-      .container:focus {
-        outline: 0;
-        border-color: #09f;
-      }
-
-      #hline {
+      canvas {
         position: absolute;
-        height: 1px;
-        width: 100%;
-        background: #474747;
-      }
-
-      #vline {
-        position: absolute;
-        width: 1px;
-        height: 100%;
-        background: #474747;
+        top: 0; bottom: 0; left: 0; right: 0;
       }
     </style>
     <script src="../dist/input.js"></script>
@@ -60,9 +43,8 @@
 
   <body>
     <h2>Simple</h2>
-    <div id="input" class="container" tabindex="-1">
-      <div id="hline"></div>
-      <div id="vline"></div>
+    <div id="input" class="container">
+      <canvas />
     </div>
     <script>
       'use strict';
@@ -74,15 +56,15 @@
       memStats.domElement.style.zIndex = 10;
       document.body.appendChild(memStats.domElement);
 
-      let input = new Input(document.getElementById('input'));
-      let vline = document.getElementById('vline');
-      let hline = document.getElementById('hline');
+      let input = new Input();
+
+      let canvas = document.querySelector('canvas');
+      let ctx = canvas.getContext('2d');
 
       function animate() {
         input.reset();
-
-        vline.style.left = `${input.mouseX}px`;
-        hline.style.top = `${input.mouseY}px`;
+        ctx.fillStyle = '#222';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         memStats.update();
         requestAnimationFrame(animate);
