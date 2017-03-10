@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Example: Simple</title>
+    <style>
+      body {
+        text-align: center;
+        background: #333;
+
+        position: absolute;
+        top: 0; bottom: 0; left: 0; right: 0;
+        display: flex;
+        flex-direction: column;
+
+        /*user-select: none;
+        cursor: default;*/
+      }
+
+      h2 {
+        color: #f90;
+      }
+
+      .container {
+        flex: 1;
+        border: 1px solid #666;
+        margin: 3px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+    <script src="../dist/input.js"></script>
+    <script src="../node_modules/memory-stats/memory-stats.js"></script>
+  </head>
+
+  <body>
+    <h2>Simple</h2>
+    <div id="input" class="container"></div>
+    <script>
+      'use strict';
+
+      let memStats = new MemoryStats();
+      memStats.domElement.style.position = 'fixed';
+      memStats.domElement.style.right = '5px';
+      memStats.domElement.style.top = '5px';
+      memStats.domElement.style.zIndex = 10;
+      document.body.appendChild(memStats.domElement);
+
+      let input = new Input();
+
+      function animate() {
+        input.reset();
+
+        memStats.update();
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+    </script>
+  </body>
+</html>
