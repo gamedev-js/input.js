@@ -270,6 +270,22 @@ export default class Input {
     return this._mouse.y;
   }
 
+  get mouseDeltaX () {
+    return this._mouse.dx;
+  }
+
+  get mouseDeltaY () {
+    return this._mouse.dy;
+  }
+
+  get mouseScrollX () {
+    return this._mouse.scrollX;
+  }
+
+  get mouseScrollY () {
+    return this._mouse.scrollY;
+  }
+
   /**
    * @method reset
    *
