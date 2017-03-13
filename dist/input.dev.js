@@ -1,6 +1,6 @@
 
 /*
- * gamedev-js/input v1.0.2
+ * gamedev-js/input v1.0.3
  * (c) 2017 @Johnny Wu
  * Released under the MIT License.
  */
@@ -278,6 +278,22 @@ class Input {
 
   get mouseY () {
     return this._mouse.y;
+  }
+
+  get mouseDeltaX () {
+    return this._mouse.dx;
+  }
+
+  get mouseDeltaY () {
+    return this._mouse.dy;
+  }
+
+  get mouseScrollX () {
+    return this._mouse.scrollX;
+  }
+
+  get mouseScrollY () {
+    return this._mouse.scrollY;
   }
 
   /**
