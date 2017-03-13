@@ -1,10 +1,36 @@
-## Input
+## Input States
 
 Update input states every frame.
 
+## Install
+
+```bash
+npm install input-states
+```
+
+## Usage
+
+```javascript
+  let input = new Input();
+
+  function animate() {
+    if (input.keydown('w')) {
+      console.log('hello world');
+    }
+
+    input.reset();
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+```
+
+## Documentation
+
+TODO
+
 ## TODO
 
- - input.click(key, downupSpan, dragDistance)
- - input.dbclick(key, downupSpan, clickSpan, dragDistance)
- - options: lockPointer
- - options: useDragMask
+ - input.mouseclick(name, downupSpan, dragDistance)
+ - input.mouseclicks(name, clickCount, downupSpan, clickSpan, dragDistance)
+ - input.keyclick(name, downupSpan, dragDistance)
+ - input.keyclicks(name, clickCount, downupSpan, clickSpan, dragDistance)

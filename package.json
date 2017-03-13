@@ -1,5 +1,5 @@
 {
-  "name": "input",
+  "name": "input-states",
   "version": "1.0.0",
   "description": "Update input states every frame",
   "main": "index.js",

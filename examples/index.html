@@ -79,12 +79,13 @@
       let hline = document.getElementById('hline');
 
       function animate() {
-        input.reset();
-
         vline.style.left = `${input.mouseX}px`;
         hline.style.top = `${input.mouseY}px`;
 
+        // end of the frame
         memStats.update();
+        input.reset();
+
         requestAnimationFrame(animate);
       }
       requestAnimationFrame(animate);
