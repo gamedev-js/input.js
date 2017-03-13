@@ -24,6 +24,8 @@ class Input {
    * @param {string} [opts.maskCursor] - the cursor for drag mask.
    */
   constructor (element, opts) {
+    opts = opts || {};
+
     if (!_dragMask && opts.useMask) {
       _dragMask = document.createElement('div');
       _dragMask.classList.add('drag-mask');
