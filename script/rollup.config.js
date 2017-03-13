@@ -13,8 +13,8 @@ let banner = `
 module.exports = {
   entry: './index.js',
   targets: [
-    { dest: 'dist/input.js', format: 'iife' },
-    { dest: 'dist/input.cjs.js', format: 'cjs' },
+    { dest: 'dist/input.dev.js', format: 'iife' },
+    { dest: 'dist/input.js', format: 'cjs' },
   ],
   moduleName: 'Input',
   banner: banner,

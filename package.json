@@ -1,12 +1,14 @@
 {
   "name": "input.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Update input states every frame",
-  "main": "index.js",
+  "main": "dist/input.js",
   "scripts": {
     "start": "electron",
     "server": "http-server ./ -a localhost -p 8002 -c-1",
     "build": "rollup --config ./script/rollup.config.js",
+    "min": "uglifyjs ./dist/input.js --source-map ./dist/input.min.js.map -o ./dist/input.min.js",
+    "release": "npm run build && npm run min",
     "test": "npm run build && tap test/*.spec.js"
   },
   "repository": {
@@ -29,6 +31,7 @@
     "electron": "^1.6.3",
     "http-server": "^0.9.0",
     "memory-stats": "^1.0.2",
-    "rollup": "^0.41.4"
+    "rollup": "^0.41.4",
+    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
   }
 }
