@@ -1,6 +1,6 @@
 {
-  "name": "input-states",
-  "version": "1.0.0",
+  "name": "input.js",
+  "version": "1.0.1",
   "description": "Update input states every frame",
   "main": "index.js",
   "scripts": {
@@ -11,17 +11,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gamedev-js/input.git"
+    "url": "git+https://github.com/gamedev-js/input.js.git"
   },
   "keywords": [
-    "input"
+    "input",
+    "mouse",
+    "keyboard"
   ],
   "author": "jwu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gamedev-js/input/issues"
+    "url": "https://github.com/gamedev-js/input.js/issues"
   },
-  "homepage": "https://github.com/gamedev-js/input/issues",
+  "homepage": "https://github.com/gamedev-js/input.js/issues",
   "dependencies": {},
   "devDependencies": {
     "electron": "^1.6.3",

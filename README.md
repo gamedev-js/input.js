@@ -5,7 +5,7 @@ Update input states every frame.
 ## Install
 
 ```bash
-npm install input-states
+npm install input.js
 ```
 
 ## Usage
