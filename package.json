@@ -5,7 +5,7 @@
   "main": "dist/input.js",
   "scripts": {
     "start": "electron",
-    "server": "node ./script/ip.js -p 8002",
+    "server": "preview -p 8002 -e examples",
     "build": "rollup --config ./script/rollup.config.js",
     "min": "uglifyjs ./dist/input.dev.js --source-map ./dist/input.min.js.map -o ./dist/input.min.js",
     "release": "npm run build && npm run min",
@@ -29,10 +29,8 @@
   "dependencies": {},
   "devDependencies": {
     "electron": "^1.6.3",
-    "http-server": "^0.9.0",
-    "ip": "^1.1.5",
     "memory-stats": "^1.0.2",
-    "qrcode-terminal": "^0.11.0",
+    "preview-server": "^1.0.3",
     "rollup": "^0.41.4",
     "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
   }
