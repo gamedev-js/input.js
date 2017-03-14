@@ -30,7 +30,8 @@ TODO
 
 ## TODO
 
- - input.mouseclick(name, downupSpan, dragDistance)
- - input.mouseclicks(name, clickCount, downupSpan, clickSpan, dragDistance)
- - input.keyclick(name, downupSpan, dragDistance)
- - input.keyclicks(name, clickCount, downupSpan, clickSpan, dragDistance)
+ - extensions
+  - input.mouseclick(name, downupSpan, dragDistance)
+  - input.mouseclicks(name, clickCount, downupSpan, clickSpan, dragDistance)
+  - input.keyclick(name, downupSpan)
+  - input.keyclicks(name, clickCount, downupSpan, clickSpan)
