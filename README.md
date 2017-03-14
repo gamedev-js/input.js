@@ -11,17 +11,17 @@ npm install input.js
 ## Usage
 
 ```javascript
-  let input = new Input();
+let input = new Input();
 
-  function animate() {
-    if (input.keydown('w')) {
-      console.log('hello world');
-    }
-
-    input.reset();
-    requestAnimationFrame(animate);
+function animate() {
+  if (input.keydown('w')) {
+    console.log('key w down');
   }
+
+  input.reset();
   requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
 ```
 
 ## Documentation
