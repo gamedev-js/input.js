@@ -1,6 +1,6 @@
 
 /*
- * gamedev-js/input v1.0.4
+ * gamedev-js/input v1.1.0
  * (c) 2017 @Johnny Wu
  * Released under the MIT License.
  */
