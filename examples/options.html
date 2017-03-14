@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Example: Multiple</title>
+    <style>
+      body {
+        text-align: center;
+        background: #333;
+
+        position: absolute;
+        top: 0; bottom: 0; left: 0; right: 0;
+        display: flex;
+        flex-direction: column;
+
+        /*user-select: none;
+        cursor: default;*/
+      }
+
+      h2 {
+        color: #f90;
+      }
+
+      .row {
+        flex: 1;
+
+        display: flex;
+        flex-direction: row;
+      }
+
+      .container {
+        flex: 1;
+        border: 1px solid #666;
+        margin: 30px;
+        overflow: hidden;
+
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        cursor: crosshair;
+        color: #555;
+        font-weight: bold;
+      }
+
+      .container:focus {
+        outline: 0;
+        border-color: #09f;
+      }
+
+      #hline {
+        position: absolute;
+        height: 1px;
+        width: 100%;
+        background: #474747;
+      }
+
+      #vline {
+        position: absolute;
+        width: 1px;
+        height: 100%;
+        background: #474747;
+      }
+    </style>
+    <script src="../dist/input.dev.js"></script>
+  </head>
+
+  <body>
+    <h2>Multiple</h2>
+    <div class="row">
+      <div id="normal" class="container" tabindex="-1">
+        <div id="hline"></div>
+        <div id="vline"></div>
+        <div>Normal</div>
+      </div>
+      <div id="mask" class="container" tabindex="-1">
+        <div id="hline"></div>
+        <div id="vline"></div>
+        <div>Mask</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div id="lock" class="container" tabindex="-1">
+        <div id="hline"></div>
+        <div id="vline"></div>
+        <div>Lock</div>
+      </div>
+      <div id="grab" class="container" tabindex="-1">
+        <div id="hline"></div>
+        <div id="vline"></div>
+        <div>Grab</div>
+      </div>
+    </div>
+    <script>
+      'use strict';
+
+      ['normal', 'mask', 'grab', 'lock'].forEach(id => {
+        let el = document.getElementById(id);
+        let opts = {};
+
+        if (id === 'mask') {
+          opts.useMask = true;
+          opts.maskCursor = 'crosshair';
+        } else if (id === 'lock') {
+          opts.lock = true;
+        }
+
+        let input = new Input(el, opts);
+        if (id === 'grab') {
+          input.grabMouse(true);
+        }
+
+        let vline = el.querySelector('#vline');
+        let hline = el.querySelector('#hline');
+
+        function animate() {
+          vline.style.left = `${input.mouseX}px`;
+          hline.style.top = `${input.mouseY}px`;
+
+          input.reset();
+          requestAnimationFrame(animate);
+        }
+        requestAnimationFrame(animate);
+      });
+    </script>
+  </body>
+</html>

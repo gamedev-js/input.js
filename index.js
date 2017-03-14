@@ -10,6 +10,7 @@ export default class Input {
    * @method constructor
    * @param {HTMLElement} [element]
    * @param {object} [opts]
+   * @param {string} [opts.lock] - lock cursor when mouse down. default is false.
    * @param {boolean} [opts.useMask] - use drag mask (for prevent cursor changes).
    * @param {string} [opts.maskCursor] - the cursor for drag mask.
    */
@@ -68,6 +69,9 @@ export default class Input {
       event.preventDefault();
       event.stopPropagation();
 
+      this._mouse.dx = event.movementX;
+      this._mouse.dy = event.movementY;
+
       if (this._pointerLocked) {
         this._mouse.x += event.movementX;
         this._mouse.y += event.movementY;
@@ -91,6 +95,10 @@ export default class Input {
       // NOTE: this will prevent mouse enter the text selection state.
       event.preventDefault();
       event.stopPropagation();
+
+      if (this._opts.lock) {
+        this._lock(true);
+      }
 
       this._installGlobalEvents();
 
@@ -199,7 +207,26 @@ export default class Input {
       this._keyboard[event.key] = KEY_UP;
     };
 
+    // contextmenu
+    this._contextmenuHandle = event => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+
     this._registerEvents();
+  }
+
+  destroy () {
+    this._element.removeEventListener('mousedown', this._mousedownHandle);
+    this._element.removeEventListener('mouseenter', this._mouseenterHandle);
+    this._element.removeEventListener('mouseleave', this._mouseleaveHandle);
+    this._element.removeEventListener('mousemove', this._mousemoveHandle);
+    this._element.removeEventListener('keydown', this._keydownHandle);
+    this._element.removeEventListener('keyup', this._keyupHandle);
+
+    this._element.removeEventListener('contextmenu', this._contextmenuHandle);
+
+    this._uninstallGlobalEvents();
   }
 
   _registerEvents () {
@@ -209,6 +236,8 @@ export default class Input {
     this._element.addEventListener('mousemove', this._mousemoveHandle);
     this._element.addEventListener('keydown', this._keydownHandle);
     this._element.addEventListener('keyup', this._keyupHandle);
+
+    this._element.addEventListener('contextmenu', this._contextmenuHandle);
   }
 
   _installGlobalEvents () {
@@ -222,7 +251,7 @@ export default class Input {
 
     if (this._opts.useMask) {
       _dragMask.style.cursor = this._opts.maskCursor || 'default';
-      document.body.appendChild(_dragMask);
+      this._element.appendChild(_dragMask);
     }
 
     this._globalEventInstalled = true;
@@ -233,12 +262,20 @@ export default class Input {
       return;
     }
 
+    // if we have mouse key pressed, skip it
     if (
-      this._mouseGrabbed ||
       (this._mouse.left !== KEY_NONE && this._mouse.left !== KEY_UP) ||
       (this._mouse.right !== KEY_NONE && this._mouse.right !== KEY_UP) ||
       (this._mouse.middle !== KEY_NONE && this._mouse.middle !== KEY_UP)
     ) {
+      return;
+    }
+
+    // unlock mouse here
+    this._lock(false);
+
+    // if we are grabbing mouse, skip it
+    if (this._mouseGrabbed) {
       return;
     }
 
@@ -253,15 +290,29 @@ export default class Input {
     this._globalEventInstalled = false;
   }
 
-  destroy () {
-    this._element.removeEventListener('mousedown', this._mousedownHandle);
-    this._element.removeEventListener('mouseenter', this._mouseenterHandle);
-    this._element.removeEventListener('mouseleave', this._mouseleaveHandle);
-    this._element.removeEventListener('mousemove', this._mousemoveHandle);
-    this._element.removeEventListener('keydown', this._keydownHandle);
-    this._element.removeEventListener('keyup', this._keyupHandle);
+  // NOTE: in web-browser, requestPointerLock only works in mousedown event
+  _lock (locked) {
+    if (locked) {
+      if (this._pointerLocked) {
+        return;
+      }
 
-    this._uninstallGlobalEvents();
+      if (this._element.requestPointerLock) {
+        this._element.requestPointerLock();
+        this._pointerLocked = true;
+      }
+
+      return;
+    } else {
+      if (!this._pointerLocked) {
+        return;
+      }
+
+      if (document.exitPointerLock) {
+        document.exitPointerLock();
+        this._pointerLocked = false;
+      }
+    }
   }
 
   get mouseX () {
@@ -339,36 +390,6 @@ export default class Input {
 
   resize () {
     this._bcr = this._element.getBoundingClientRect();
-  }
-
-  /**
-   * @method lockMouse
-   * @param {boolean} locked
-   *
-   * try to lock the mouse via `element.requestPointerLock`.
-   */
-  lockMouse (locked) {
-    if (locked) {
-      if (this._pointerLocked) {
-        return;
-      }
-
-      if (this._element.requestPointerLock) {
-        this._element.requestPointerLock();
-        this._pointerLocked = true;
-      }
-
-      return;
-    } else {
-      if (!this._pointerLocked) {
-        return;
-      }
-
-      if (document.exitPointerLock) {
-        document.exitPointerLock();
-        this._pointerLocked = false;
-      }
-    }
   }
 
   /**
