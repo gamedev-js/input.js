@@ -53,6 +53,19 @@
         height: 100%;
         background: #474747;
       }
+
+      #info {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        width: 200px;
+
+        padding: 5px;
+        border: 1px solid #666;
+        color: #666;
+        background: rgba(0,0,0,0.1);
+        text-align: left;
+      }
     </style>
     <script src="../dist/input.dev.js"></script>
     <script src="../node_modules/memory-stats/memory-stats.js"></script>
@@ -63,6 +76,7 @@
     <div id="input" class="container" tabindex="-1">
       <div id="hline"></div>
       <div id="vline"></div>
+      <div id="info"></div>
     </div>
     <script>
       'use strict';
@@ -77,10 +91,15 @@
       let input = new Input(document.getElementById('input'));
       let vline = document.getElementById('vline');
       let hline = document.getElementById('hline');
+      let info = document.getElementById('info');
 
       function animate() {
         vline.style.left = `${input.mouseX}px`;
         hline.style.top = `${input.mouseY}px`;
+        info.innerText = `Mouse Info:
+          wheel: ${input.mouseScrollX}, ${input.mouseScrollY}
+          pos: ${input.mouseX}, ${input.mouseY}
+        `;
 
         // end of the frame
         memStats.update();

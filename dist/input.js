@@ -1,6 +1,6 @@
 
 /*
- * gamedev-js/input v1.1.0
+ * gamedev-js/input v1.1.1
  * (c) 2017 @Johnny Wu
  * Released under the MIT License.
  */
@@ -230,6 +230,7 @@ class Input {
     this._element.removeEventListener('mouseenter', this._mouseenterHandle);
     this._element.removeEventListener('mouseleave', this._mouseleaveHandle);
     this._element.removeEventListener('mousemove', this._mousemoveHandle);
+    this._element.removeEventListener('mousewheel', this._mousewheelHandle);
     this._element.removeEventListener('keydown', this._keydownHandle);
     this._element.removeEventListener('keyup', this._keyupHandle);
 
@@ -243,6 +244,7 @@ class Input {
     this._element.addEventListener('mouseenter', this._mouseenterHandle);
     this._element.addEventListener('mouseleave', this._mouseleaveHandle);
     this._element.addEventListener('mousemove', this._mousemoveHandle);
+    this._element.addEventListener('mousewheel', this._mousewheelHandle);
     this._element.addEventListener('keydown', this._keydownHandle);
     this._element.addEventListener('keyup', this._keyupHandle);
 
