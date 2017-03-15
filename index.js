@@ -101,13 +101,12 @@ export default class Input {
       }
 
       this._installGlobalEvents();
+      this._element.focus();
 
       // handle mouse button
       switch (event.button) {
         // left mouse down
         case 0:
-          this._element.focus();
-
           // NOTE: do not reset KEY_DOWN when it already pressed
           if (this._mouse.left !== KEY_PRESSING) {
             this._mouse.left = KEY_DOWN;
