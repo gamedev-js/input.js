@@ -1,23 +1,31 @@
 'use strict';
 
-const version = require('../package.json').version;
+const fsJetpack = require('fs-jetpack');
+const pjson = require('../package.json');
 
 let banner = `
 /*
- * gamedev-js/input v${version}
+ * ${pjson.name} v${pjson.version}
  * (c) ${new Date().getFullYear()} @Johnny Wu
  * Released under the MIT License.
  */
 `;
 
+let dest = './dist';
+let file = 'input';
+let moduleName = 'Input';
+
+// clear directory
+fsJetpack.dir(dest, { empty: true });
+
 module.exports = {
   entry: './index.js',
   targets: [
-    { dest: 'dist/input.dev.js', format: 'iife' },
-    { dest: 'dist/input.js', format: 'cjs' },
+    { dest: `${dest}/${file}.dev.js`, format: 'iife' },
+    { dest: `${dest}/${file}.js`, format: 'cjs' },
   ],
-  moduleName: 'Input',
-  banner: banner,
+  moduleName,
+  banner,
   external: [],
   globals: {},
   sourceMap: true,

@@ -316,26 +316,44 @@ export default class Input {
     }
   }
 
+  /**
+   * @property {number} mouseX
+   */
   get mouseX () {
     return this._mouse.x;
   }
 
+  /**
+   * @property {number} mouseY
+   */
   get mouseY () {
     return this._mouse.y;
   }
 
+  /**
+   * @property {number} mouseDeltaX
+   */
   get mouseDeltaX () {
     return this._mouse.dx;
   }
 
+  /**
+   * @property {number} mouseDeltaY
+   */
   get mouseDeltaY () {
     return this._mouse.dy;
   }
 
+  /**
+   * @property {number} mouseScrollX
+   */
   get mouseScrollX () {
     return this._mouse.scrollX;
   }
 
+  /**
+   * @property {number} mouseScrollY
+   */
   get mouseScrollY () {
     return this._mouse.scrollY;
   }
@@ -389,6 +407,11 @@ export default class Input {
     this._uninstallGlobalEvents();
   }
 
+  /**
+   * @method resize
+   *
+   * Update cached bounding client size.
+   */
   resize () {
     this._bcr = this._element.getBoundingClientRect();
   }

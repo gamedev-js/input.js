@@ -30,8 +30,12 @@ TODO
 
 ## TODO
 
+ - options
+   - lock-filter (a filter function to decide if enter the lock state)
+ - api
+   - installTouches()
  - extensions
-  - input.mouseclick(name, downupSpan, dragDistance)
-  - input.mouseclicks(name, clickCount, downupSpan, clickSpan, dragDistance)
-  - input.keyclick(name, downupSpan)
-  - input.keyclicks(name, clickCount, downupSpan, clickSpan)
+   - input.mouseclick(name, downupSpan, dragDistance)
+   - input.mouseclicks(name, clickCount, downupSpan, clickSpan, dragDistance)
+   - input.keyclick(name, downupSpan)
+   - input.keyclicks(name, clickCount, downupSpan, clickSpan)

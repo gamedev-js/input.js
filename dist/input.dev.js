@@ -1,6 +1,6 @@
 
 /*
- * gamedev-js/input v1.1.1
+ * input.js v1.1.1
  * (c) 2017 @Johnny Wu
  * Released under the MIT License.
  */
@@ -111,13 +111,12 @@ class Input {
       }
 
       this._installGlobalEvents();
+      this._element.focus();
 
       // handle mouse button
       switch (event.button) {
         // left mouse down
         case 0:
-          this._element.focus();
-
           // NOTE: do not reset KEY_DOWN when it already pressed
           if (this._mouse.left !== KEY_PRESSING) {
             this._mouse.left = KEY_DOWN;
@@ -327,26 +326,44 @@ class Input {
     }
   }
 
+  /**
+   * @property {number} mouseX
+   */
   get mouseX () {
     return this._mouse.x;
   }
 
+  /**
+   * @property {number} mouseY
+   */
   get mouseY () {
     return this._mouse.y;
   }
 
+  /**
+   * @property {number} mouseDeltaX
+   */
   get mouseDeltaX () {
     return this._mouse.dx;
   }
 
+  /**
+   * @property {number} mouseDeltaY
+   */
   get mouseDeltaY () {
     return this._mouse.dy;
   }
 
+  /**
+   * @property {number} mouseScrollX
+   */
   get mouseScrollX () {
     return this._mouse.scrollX;
   }
 
+  /**
+   * @property {number} mouseScrollY
+   */
   get mouseScrollY () {
     return this._mouse.scrollY;
   }
@@ -400,6 +417,11 @@ class Input {
     this._uninstallGlobalEvents();
   }
 
+  /**
+   * @method resize
+   *
+   * Update cached bounding client size.
+   */
   resize () {
     this._bcr = this._element.getBoundingClientRect();
   }
