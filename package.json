@@ -1,13 +1,13 @@
 {
   "name": "input.js",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Update input states every frame",
   "main": "dist/input.js",
   "scripts": {
     "start": "electron",
     "server": "preview -p 8002 -e examples",
     "build": "rollup --config ./script/rollup.config.js",
-    "min": "uglifyjs ./dist/input.dev.js --source-map ./dist/input.min.js.map -o ./dist/input.min.js",
+    "min": "uglifyjs ./dist/input.dev.js --mangle --source-map ./dist/input.min.js.map -o ./dist/input.min.js",
     "release": "npm run build && npm run min",
     "test": "npm run build && tap test/*.spec.js"
   },

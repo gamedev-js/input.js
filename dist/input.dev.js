@@ -262,7 +262,7 @@ class Input {
 
     if (this._opts.useMask) {
       _dragMask.style.cursor = this._opts.maskCursor || 'default';
-      this._element.appendChild(_dragMask);
+      document.body.appendChild(_dragMask);
     }
 
     this._globalEventInstalled = true;
