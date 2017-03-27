@@ -1,6 +1,6 @@
 
 /*
- * input.js v1.1.1
+ * input.js v1.1.2
  * (c) 2017 @Johnny Wu
  * Released under the MIT License.
  */
@@ -20,7 +20,7 @@ class Input {
    * @method constructor
    * @param {HTMLElement} [element]
    * @param {object} [opts]
-   * @param {string} [opts.lock] - lock cursor when mouse down. default is false.
+   * @param {boolean} [opts.lock] - lock cursor when mouse down. default is false.
    * @param {boolean} [opts.useMask] - use drag mask (for prevent cursor changes).
    * @param {string} [opts.maskCursor] - the cursor for drag mask.
    */
