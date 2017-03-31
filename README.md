@@ -39,3 +39,7 @@ TODO
    - input.mouseclicks(name, clickCount, downupSpan, clickSpan, dragDistance)
    - input.keyclick(name, downupSpan)
    - input.keyclicks(name, clickCount, downupSpan, clickSpan)
+
+## License
+
+MIT © 2017 Johnny Wu
