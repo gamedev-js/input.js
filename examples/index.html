@@ -67,8 +67,8 @@
         text-align: left;
       }
     </style>
+    <script src="../node_modules/lstats.js/dist/lstats.dev.js"></script>
     <script src="../dist/input.dev.js"></script>
-    <script src="../node_modules/memory-stats/memory-stats.js"></script>
   </head>
 
   <body>
@@ -81,12 +81,7 @@
     <script>
       'use strict';
 
-      let memStats = new MemoryStats();
-      memStats.domElement.style.position = 'fixed';
-      memStats.domElement.style.right = '5px';
-      memStats.domElement.style.top = '5px';
-      memStats.domElement.style.zIndex = 10;
-      document.body.appendChild(memStats.domElement);
+      let memStats = new LStats(document.body, ['mb']);
 
       let input = new Input(document.getElementById('input'));
       let vline = document.getElementById('vline');
@@ -102,8 +97,8 @@
         `;
 
         // end of the frame
-        memStats.update();
         input.reset();
+        memStats.tick();
 
         requestAnimationFrame(animate);
       }

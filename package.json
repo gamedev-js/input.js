@@ -27,11 +27,12 @@
     "url": "https://github.com/gamedev-js/input.js/issues"
   },
   "homepage": "https://github.com/gamedev-js/input.js/issues",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "electron": "^1.6.3",
     "fs-jetpack": "^0.13.0",
-    "memory-stats": "^1.0.2",
+    "lstats.js": "^1.2.0",
     "preview-server": "^1.0.7",
     "rollup": "^0.41.4",
     "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"

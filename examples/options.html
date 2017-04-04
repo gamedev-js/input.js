@@ -63,6 +63,7 @@
         background: #474747;
       }
     </style>
+    <script src="../node_modules/lstats.js/dist/lstats.dev.js"></script>
     <script src="../dist/input.dev.js"></script>
   </head>
 
@@ -96,6 +97,8 @@
     <script>
       'use strict';
 
+      let memStats = new LStats(document.body, ['mb']);
+
       ['normal', 'mask', 'grab', 'lock'].forEach(id => {
         let el = document.getElementById(id);
         let opts = {};
@@ -120,6 +123,8 @@
           hline.style.top = `${input.mouseY}px`;
 
           input.reset();
+          memStats.tick();
+
           requestAnimationFrame(animate);
         }
         requestAnimationFrame(animate);

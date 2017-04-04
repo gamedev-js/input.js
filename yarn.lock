@@ -544,13 +544,13 @@ loud-rejection@^1.0.0:
     currently-unhandled "^0.4.1"
     signal-exit "^3.0.0"
 
+lstats.js@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/lstats.js/-/lstats.js-1.2.0.tgz#adab6adc7cd318fae30a7a8511dd6cd68e7277df"
+
 map-obj@^1.0.0, map-obj@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-1.0.1.tgz#d933ceb9205d82bdcf4886f6742bdc2b4dea146d"
-
-memory-stats@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/memory-stats/-/memory-stats-1.0.2.tgz#806690763e83982270038563bbd153fd55a8be85"
 
 meow@^3.1.0:
   version "3.7.0"
@@ -1006,10 +1006,6 @@ tunnel-agent@^0.6.0:
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
-
-twgl.js@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/twgl.js/-/twgl.js-3.2.2.tgz#663db6d0490610788d2d73513ee2c1bdc6582291"
 
 typedarray@~0.0.5:
   version "0.0.6"
