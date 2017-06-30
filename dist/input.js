@@ -1,6 +1,6 @@
 
 /*
- * input.js v1.1.3
+ * input.js v1.1.4
  * (c) 2017 @Johnny Wu
  * Released under the MIT License.
  */
@@ -224,7 +224,7 @@ Input.prototype.destroy = function destroy () {
   this._element.removeEventListener('mouseenter', this._mouseenterHandle);
   this._element.removeEventListener('mouseleave', this._mouseleaveHandle);
   this._element.removeEventListener('mousemove', this._mousemoveHandle);
-  this._element.removeEventListener('mousewheel', this._mousewheelHandle);
+  this._element.removeEventListener('mousewheel', this._mousewheelHandle, { passive: true });
   this._element.removeEventListener('keydown', this._keydownHandle);
   this._element.removeEventListener('keyup', this._keyupHandle);
 
@@ -238,7 +238,7 @@ Input.prototype._registerEvents = function _registerEvents () {
   this._element.addEventListener('mouseenter', this._mouseenterHandle);
   this._element.addEventListener('mouseleave', this._mouseleaveHandle);
   this._element.addEventListener('mousemove', this._mousemoveHandle);
-  this._element.addEventListener('mousewheel', this._mousewheelHandle);
+  this._element.addEventListener('mousewheel', this._mousewheelHandle, { passive: false });
   this._element.addEventListener('keydown', this._keydownHandle);
   this._element.addEventListener('keyup', this._keyupHandle);
 
@@ -252,7 +252,7 @@ Input.prototype._installGlobalEvents = function _installGlobalEvents () {
 
   document.addEventListener('mouseup', this._mouseupHandle);
   document.addEventListener('mousemove', this._mousemoveHandle);
-  document.addEventListener('mousewheel', this._mousewheelHandle, {passive: true});
+  document.addEventListener('mousewheel', this._mousewheelHandle, { passive: true });
 
   if (this._opts.useMask) {
     _dragMask.style.cursor = this._opts.maskCursor || 'default';
