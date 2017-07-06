@@ -1,8 +1,9 @@
 {
   "name": "input.js",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Update input states every frame",
   "main": "dist/input.js",
+  "jsnext:main": "index.js",
   "scripts": {
     "build:dev": "rollup -c ./script/rollup.config.js",
     "build:min": "uglifyjs ./dist/input.dev.js --mangle --source-map url=input.min.js.map -o ./dist/input.min.js",

@@ -1,6 +1,6 @@
 
 /*
- * input.js v1.1.4
+ * input.js v1.1.5
  * (c) 2017 @Johnny Wu
  * Released under the MIT License.
  */
