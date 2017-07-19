@@ -31,7 +31,6 @@ export default class Input {
 
     this._opts = opts;
     this._element = element || document.body;
-    this._lastTime = 0;
     this._globalEventInstalled = false;
 
     // mouse internal states
