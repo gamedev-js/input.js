@@ -139,7 +139,7 @@ export default class Input {
       this._mouse.dx = event.movementX;
       this._mouse.dy = event.movementY;
       this._mouse.prevX = this._mouse.x = event.clientX - this._bcr.left;
-      this._mouse.prevX = this._mouse.y = event.clientY - this._bcr.top;
+      this._mouse.prevY = this._mouse.y = event.clientY - this._bcr.top;
 
       // handle mouse button
       switch (event.button) {
@@ -168,7 +168,7 @@ export default class Input {
       this._mouse.dx = 0.0;
       this._mouse.dy = 0.0;
       this._mouse.prevX = this._mouse.x = event.clientX - this._bcr.left;
-      this._mouse.prevX = this._mouse.y = event.clientY - this._bcr.top;
+      this._mouse.prevY = this._mouse.y = event.clientY - this._bcr.top;
     };
 
     // mouseleave
@@ -185,7 +185,7 @@ export default class Input {
       this._mouse.dx = event.movementX;
       this._mouse.dy = event.movementY;
       this._mouse.prevX = this._mouse.x = event.clientX - this._bcr.left;
-      this._mouse.prevX = this._mouse.y = event.clientY - this._bcr.top;
+      this._mouse.prevY = this._mouse.y = event.clientY - this._bcr.top;
     };
 
     // keydown
