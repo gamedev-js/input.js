@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Example: Touches</title>
+  <style>
+    body {
+      text-align: center;
+      background: #333;
+
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+
+      /*user-select: none;
+        cursor: default;*/
+    }
+
+    h2 {
+      color: #f90;
+    }
+
+    .container {
+      flex: 1;
+      border: 1px solid #666;
+      margin: 3px;
+      overflow: hidden;
+
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      cursor: crosshair;
+    }
+
+    .container:focus {
+      outline: 0;
+      border-color: #09f;
+    }
+
+    #touchPos {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 200px;
+
+      padding: 5px;
+      border: 1px solid #666;
+      color: #666;
+      background: rgba(0, 0, 0, 0.1);
+      text-align: left;
+    }
+  </style>
+  <!-- <script src="../node_modules/vconsole/dist/vconsole.min.js"></script> -->
+  <script src="../node_modules/lstats.js/dist/lstats.dev.js"></script>
+  <script src="../dist/input.dev.js"></script>
+</head>
+
+<body>
+  <h2>Touch Test</h2>
+  <div id="touchInput" class="container" tabindex="-1">
+    <div id="touchPos"></div>
+  </div>
+  <script>
+    'use strict';
+    let memStats = new LStats(document.body, ['mb']);
+
+    let input = new Input(document.getElementById('touchInput'));
+    let info = document.getElementById('touchPos');
+
+    function animate() {
+      let text = [];
+
+      for (let i = 0; i < input.touches.length; i++) {
+        let touch = input.touches[i];
+        text[i] = ` id: ${touch.id}
+          phase: ${touch.phase}
+          pos: ${touch.x}, ${touch.y}
+          delta: ${touch.dx}, ${touch.dy}
+          previous: ${touch.prevX}, ${touch.prevY}
+       `;
+      }
+      info.innerText = text;
+
+      // end of the frame
+      input.reset();
+      memStats.tick();
+
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+  </script>
+</body>
+
+</html>
