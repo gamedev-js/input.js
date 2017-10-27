@@ -27,8 +27,8 @@ module.exports = {
   ],
   moduleName,
   banner,
-  external: [],
-  globals: {},
+  external: ['memop'],
+  globals: {'memop': 'window.memop'},
   sourceMap: true,
   plugins: [
     buble(),

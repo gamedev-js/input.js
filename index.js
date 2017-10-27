@@ -1,3 +1,5 @@
+import { RecyclePool } from 'memop';
+
 const KEY_NONE = 0;
 const KEY_DOWN = 1;
 const KEY_PRESSING = 2;
@@ -69,7 +71,18 @@ export default class Input {
     };
 
     //the touch state
-    this._touches = [];
+    this._touches = new RecyclePool(() => {
+      return {
+        id: -1, // touch.identifier
+        phase: -1, // 0: START, 1: PRESSING, 2: END
+        x: 0,
+        y: 0,
+        dx: 0,
+        dy: 0,
+        prevX: 0,
+        prevY: 0,
+      };
+    }, 16);
 
     // mousemove
     this._mousemoveHandle = event => {
@@ -218,7 +231,7 @@ export default class Input {
       event.preventDefault();
 
       for (let i = 0; i < event.changedTouches.length; i++) {
-        let touch = {};
+        let touch = this._touches.add();
         touch.id = event.changedTouches[i].identifier;
         touch.phase = TOUCH_START;
         touch.x = event.changedTouches[i].clientX - this._bcr.left;
@@ -227,8 +240,6 @@ export default class Input {
         touch.dy = 0;
         touch.prevX = 0;
         touch.prevY = 0;
-
-        this._touches.push(touch);
       }
     };
 
@@ -238,12 +249,12 @@ export default class Input {
 
       for (let i = 0; i < this._touches.length; i++) {
         for (let j = 0; j < event.changedTouches.length; j++) {
-          if (this._touches[i].id === event.changedTouches[j].identifier) {
-            this._touches[i].phase = TOUCH_PRESSING;
-            this._touches[i].x = event.changedTouches[j].clientX - this._bcr.left;
-            this._touches[i].y = event.changedTouches[j].clientY - this._bcr.top;
-            this._touches[i].dx = this._touches[i].x - this._touches[i].prevX;
-            this._touches[i].dy = this._touches[i].y - this._touches[i].prevY;
+          if (this._touches.data[i].id === event.changedTouches[j].identifier) {
+            this._touches.data[i].phase = TOUCH_PRESSING;
+            this._touches.data[i].x = event.changedTouches[j].clientX - this._bcr.left;
+            this._touches.data[i].y = event.changedTouches[j].clientY - this._bcr.top;
+            this._touches.data[i].dx = this._touches.data[i].x - this._touches.data[i].prevX;
+            this._touches.data[i].dy = this._touches.data[i].y - this._touches.data[i].prevY;
           }
         }
       }
@@ -255,12 +266,12 @@ export default class Input {
 
       for (let i = 0; i < this._touches.length; i++) {
         for (let j = 0; j < event.changedTouches.length; j++) {
-          if (this._touches[i].id === event.changedTouches[j].identifier) {
-            this._touches[i].phase = TOUCH_END;
-            this._touches[i].prevX = this._touches[i].x = event.changedTouches[j].clientX - this._bcr.left;
-            this._touches[i].prevY = this._touches[i].y = event.changedTouches[j].clientY - this._bcr.top;
-            this._touches[i].dx = 0;
-            this._touches[i].dy = 0;
+          if (this._touches.data[i].id === event.changedTouches[j].identifier) {
+            this._touches.data[i].phase = TOUCH_END;
+            this._touches.data[i].prevX = this._touches.data[i].x = event.changedTouches[j].clientX - this._bcr.left;
+            this._touches.data[i].prevY = this._touches.data[i].y = event.changedTouches[j].clientY - this._bcr.top;
+            this._touches.data[i].dx = 0;
+            this._touches.data[i].dy = 0;
           }
         }
       }
@@ -272,12 +283,12 @@ export default class Input {
 
       for (let i = 0; i < this._touches.length; i++) {
         for (let j = 0; j < event.changedTouches.length; j++) {
-          if (this._touches[i].id === event.changedTouches[j].identifier) {
-            this._touches[i].phase = TOUCH_CANCEL;
-            this._touches[i].prevX = this._touches[i].x = event.changedTouches[j].clientX - this._bcr.left;
-            this._touches[i].prevY = this._touches[i].y = event.changedTouches[j].clientY - this._bcr.top;
-            this._touches[i].dx = 0;
-            this._touches[i].dy = 0;
+          if (this._touches.data[i].id === event.changedTouches[j].identifier) {
+            this._touches.data[i].phase = TOUCH_CANCEL;
+            this._touches.data[i].prevX = this._touches.data[i].x = event.changedTouches[j].clientX - this._bcr.left;
+            this._touches.data[i].prevY = this._touches.data[i].y = event.changedTouches[j].clientY - this._bcr.top;
+            this._touches.data[i].dx = 0;
+            this._touches.data[i].dy = 0;
           }
         }
       }
@@ -458,10 +469,18 @@ export default class Input {
   }
 
   /**
-  * @property {array} touches
-  */
-  get touches() {
-    return this._touches;
+   * @property {number} touchCount
+   */
+  get touchCount() {
+    return this._touches.length;
+  }
+
+  /**
+   * @method getTouchInfo
+   * @param {number} idx
+   */
+  getTouchInfo(idx) {
+    return this._touches.data[idx];
   }
 
   /**
@@ -511,15 +530,15 @@ export default class Input {
 
     // update touch states
     for (let i = 0; i < this._touches.length; i++) {
-      this._touches[i].prevX = this._touches[i].x;
-      this._touches[i].prevY = this._touches[i].y;
-      this._touches[i].dx = 0;
-      this._touches[i].dy = 0;
-      if (this._touches[i].phase === TOUCH_START) {
-        this._touches[i].phase = TOUCH_PRESSING;
+      this._touches.data[i].prevX = this._touches.data[i].x;
+      this._touches.data[i].prevY = this._touches.data[i].y;
+      this._touches.data[i].dx = 0;
+      this._touches.data[i].dy = 0;
+      if (this._touches.data[i].phase === TOUCH_START) {
+        this._touches.data[i].phase = TOUCH_PRESSING;
       }
-      if (this._touches[i].phase === TOUCH_END || this._touches[i].phase === TOUCH_CANCEL) {
-        this._touches.splice(i, 1);
+      if (this._touches.data[i].phase === TOUCH_END || this._touches.data[i].phase === TOUCH_CANCEL) {
+        this._touches.remove(i);
       }
     }
 

@@ -59,7 +59,11 @@
   </style>
   <!-- <script src="../node_modules/vconsole/dist/vconsole.min.js"></script> -->
   <script src="../node_modules/lstats.js/dist/lstats.dev.js"></script>
+  <script src="../node_modules/memop/dist/memop.dev.js"></script>
   <script src="../dist/input.dev.js"></script>
+  <!-- <script>
+    var vConsole = new VConsole();
+  </script> -->
 </head>
 
 <body>
@@ -77,8 +81,8 @@
     function animate() {
       let text = [];
 
-      for (let i = 0; i < input.touches.length; i++) {
-        let touch = input.touches[i];
+      for (let i = 0; i < input.touchCount; i++) {
+        let touch = input.getTouchInfo(i);
         text[i] = ` id: ${touch.id}
           phase: ${touch.phase}
           pos: ${touch.x}, ${touch.y}
