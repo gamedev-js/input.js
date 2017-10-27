@@ -23,7 +23,8 @@
   "keywords": [
     "input",
     "mouse",
-    "keyboard"
+    "keyboard",
+    "touch"
   ],
   "author": "jwu",
   "license": "MIT",
@@ -41,7 +42,8 @@
     "rollup": "^0.41.4",
     "rollup-plugin-buble": "^0.15.0",
     "rollup-watch": "^3.2.2",
-    "uglify-es": "^3.0.15"
+    "uglify-es": "^3.0.15",
+    "vconsole": "^3.0.0"
   },
   "files": [
     "dist",
