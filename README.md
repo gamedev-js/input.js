@@ -26,7 +26,9 @@ requestAnimationFrame(animate);
 
 ## Documentation
 
-TODO
+- [Mouse](docs/mouse.md)
+- [Keyboard](docs/keyboard.md)
+- [Touches](docs/touches.md)
 
 ## TODO
 
