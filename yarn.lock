@@ -760,8 +760,8 @@ pretty-bytes@^1.0.2:
     meow "^3.1.0"
 
 preview-server@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/preview-server/-/preview-server-1.0.7.tgz#a3843383ba5464e5fd08e87ee3cd6b20d7e73cff"
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/preview-server/-/preview-server-1.1.0.tgz#e16da2b715045046551f6ce79f3300051e56acff"
   dependencies:
     http-server "^0.9.0"
     ip "^1.1.5"
