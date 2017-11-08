@@ -40,6 +40,11 @@ export default class Input {
     this._element = element || document.body;
     this._globalEventInstalled = false;
 
+    let ua = navigator.userAgent.toLowerCase();
+    if (/mobile|android|iphone|ipad|phone/i.test(ua)) {
+      this._hasTouch = true;
+    }
+
     // mouse internal states
     this._pointerLocked = false;
     this._mouseGrabbed = false;
@@ -410,6 +415,13 @@ export default class Input {
         this._pointerLocked = false;
       }
     }
+  }
+
+  /**
+   * @property {boolean} hasTouch
+   */
+  get hasTouch() {
+    return this._hasTouch;
   }
 
   /**
