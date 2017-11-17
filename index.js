@@ -20,6 +20,7 @@ export default class Input {
    * @param {boolean} [opts.lock] - lock cursor when mouse down. default is false.
    * @param {boolean} [opts.useMask] - use drag mask (for prevent cursor changes).
    * @param {string} [opts.maskCursor] - the cursor for drag mask.
+   * @param {string} [opts.invertY] - invert Y coordinate (start from bottom-left instead)
    */
   constructor(element, opts) {
     opts = opts || {};
@@ -101,8 +102,8 @@ export default class Input {
         this._mouse.x += event.movementX;
         this._mouse.y += event.movementY;
       } else {
-        this._mouse.x = event.clientX - this._bcr.left;
-        this._mouse.y = event.clientY - this._bcr.top;
+        this._mouse.x = this._calcOffsetX(event.clientX);
+        this._mouse.y = this._calcOffsetY(event.clientY);
       }
     };
 
@@ -164,8 +165,8 @@ export default class Input {
       // reset mouse position
       this._mouse.dx = event.movementX;
       this._mouse.dy = event.movementY;
-      this._mouse.prevX = this._mouse.x = event.clientX - this._bcr.left;
-      this._mouse.prevY = this._mouse.y = event.clientY - this._bcr.top;
+      this._mouse.prevX = this._mouse.x = this._calcOffsetX(event.clientX);
+      this._mouse.prevY = this._mouse.y = this._calcOffsetY(event.clientY);
 
       // handle mouse button
       switch (event.button) {
@@ -193,8 +194,8 @@ export default class Input {
 
       this._mouse.dx = 0.0;
       this._mouse.dy = 0.0;
-      this._mouse.prevX = this._mouse.x = event.clientX - this._bcr.left;
-      this._mouse.prevY = this._mouse.y = event.clientY - this._bcr.top;
+      this._mouse.prevX = this._mouse.x = this._calcOffsetX(event.clientX);
+      this._mouse.prevY = this._mouse.y = this._calcOffsetY(event.clientY);
     };
 
     // mouseleave
@@ -210,8 +211,8 @@ export default class Input {
 
       this._mouse.dx = event.movementX;
       this._mouse.dy = event.movementY;
-      this._mouse.prevX = this._mouse.x = event.clientX - this._bcr.left;
-      this._mouse.prevY = this._mouse.y = event.clientY - this._bcr.top;
+      this._mouse.prevX = this._mouse.x = this._calcOffsetX(event.clientX);
+      this._mouse.prevY = this._mouse.y = this._calcOffsetY(event.clientY);
     };
 
     // keydown
@@ -239,8 +240,8 @@ export default class Input {
         let touch = this._touches.add();
         touch.id = event.changedTouches[i].identifier;
         touch.phase = TOUCH_START;
-        touch.x = event.changedTouches[i].clientX - this._bcr.left;
-        touch.y = event.changedTouches[i].clientY - this._bcr.top;
+        touch.x = this._calcOffsetX(event.changedTouches[i].clientX);
+        touch.y = this._calcOffsetY(event.changedTouches[i].clientY);
         touch.dx = 0;
         touch.dy = 0;
         touch.prevX = 0;
@@ -256,8 +257,8 @@ export default class Input {
         for (let j = 0; j < event.changedTouches.length; j++) {
           if (this._touches.data[i].id === event.changedTouches[j].identifier) {
             this._touches.data[i].phase = TOUCH_PRESSING;
-            this._touches.data[i].x = event.changedTouches[j].clientX - this._bcr.left;
-            this._touches.data[i].y = event.changedTouches[j].clientY - this._bcr.top;
+            this._touches.data[i].x = this._calcOffsetX(event.changedTouches[j].clientX);
+            this._touches.data[i].y = this._calcOffsetY(event.changedTouches[j].clientY);
             this._touches.data[i].dx = this._touches.data[i].x - this._touches.data[i].prevX;
             this._touches.data[i].dy = this._touches.data[i].y - this._touches.data[i].prevY;
           }
@@ -273,8 +274,8 @@ export default class Input {
         for (let j = 0; j < event.changedTouches.length; j++) {
           if (this._touches.data[i].id === event.changedTouches[j].identifier) {
             this._touches.data[i].phase = TOUCH_END;
-            this._touches.data[i].prevX = this._touches.data[i].x = event.changedTouches[j].clientX - this._bcr.left;
-            this._touches.data[i].prevY = this._touches.data[i].y = event.changedTouches[j].clientY - this._bcr.top;
+            this._touches.data[i].prevX = this._touches.data[i].x = this._calcOffsetX(event.changedTouches[j].clientX);
+            this._touches.data[i].prevY = this._touches.data[i].y = this._calcOffsetY(event.changedTouches[j].clientY);
             this._touches.data[i].dx = 0;
             this._touches.data[i].dy = 0;
           }
@@ -290,8 +291,8 @@ export default class Input {
         for (let j = 0; j < event.changedTouches.length; j++) {
           if (this._touches.data[i].id === event.changedTouches[j].identifier) {
             this._touches.data[i].phase = TOUCH_CANCEL;
-            this._touches.data[i].prevX = this._touches.data[i].x = event.changedTouches[j].clientX - this._bcr.left;
-            this._touches.data[i].prevY = this._touches.data[i].y = event.changedTouches[j].clientY - this._bcr.top;
+            this._touches.data[i].prevX = this._touches.data[i].x = this._calcOffsetX(event.changedTouches[j].clientX);
+            this._touches.data[i].prevY = this._touches.data[i].y = this._calcOffsetY(event.changedTouches[j].clientY);
             this._touches.data[i].dx = 0;
             this._touches.data[i].dy = 0;
           }
@@ -415,6 +416,18 @@ export default class Input {
         this._pointerLocked = false;
       }
     }
+  }
+
+  _calcOffsetX (clientX) {
+    return clientX - this._bcr.left;
+  }
+
+  _calcOffsetY (clientY) {
+    if (this._opts.invertY) {
+      return this._bcr.height - (clientY - this._bcr.top);
+    }
+
+    return clientY - this._bcr.top;
   }
 
   /**
