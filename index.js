@@ -494,6 +494,30 @@ export default class Input {
   }
 
   /**
+   * @property {number} mouseButtons - mouse buttons in pressing states
+   */
+  get mouseButtons() {
+    let buttons = 0;
+
+    let btn = this._mouse.left;
+    if (btn === KEY_DOWN || btn === KEY_PRESSING) {
+      buttons |= 1;
+    }
+
+    btn = this._mouse.right;
+    if (btn === KEY_DOWN || btn === KEY_PRESSING) {
+      buttons |= 2;
+    }
+
+    btn = this._mouse.middle;
+    if (btn === KEY_DOWN || btn === KEY_PRESSING) {
+      buttons |= 4;
+    }
+
+    return buttons;
+  }
+
+  /**
    * @property {number} touchCount
    */
   get touchCount() {
