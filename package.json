@@ -14,7 +14,7 @@
     "dev": "rollup -w -c ./script/rollup.config.js",
     "start": "electron ./examples",
     "server": "preview -p 8002 -e examples",
-    "test": "tap test/*.spec.js"
+    "test": "electron-node-tap ./test/*.spec.js --renderer"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/gamedev-js/input.js/issues",
   "dependencies": {
+    "electron-node-tap": "^1.1.4",
     "memop": "^1.6.0"
   },
   "devDependencies": {
