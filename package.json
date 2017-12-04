@@ -1,6 +1,6 @@
 {
   "name": "input.js",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Update input states every frame",
   "main": "dist/input.js",
   "module": "index.js",
