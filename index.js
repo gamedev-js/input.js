@@ -1,4 +1,4 @@
-import { RecyclePool } from 'memop';
+import { FixedArray, RecyclePool } from 'memop';
 
 const KEY_NONE = 0;
 const KEY_DOWN = 1;
@@ -11,6 +11,12 @@ const TOUCH_END = 2;
 const TOUCH_CANCEL = 3;
 
 let _dragMask = null;
+let _phases = [
+  'start',
+  'pressing',
+  'end',
+  'cancel'
+];
 
 export default class Input {
   /**
@@ -52,6 +58,11 @@ export default class Input {
 
     this._bcr = element.getBoundingClientRect();
 
+    this._keydowns = new FixedArray(32);
+    this._keyups = new FixedArray(32);
+    this._mousedowns = new FixedArray(3);
+    this._mouseups = new FixedArray(3);
+
     // the mouse state
     this._mouse = {
       x: 0,
@@ -80,13 +91,16 @@ export default class Input {
     this._touches = new RecyclePool(() => {
       return {
         id: -1, // touch.identifier
-        phase: -1, // 0: START, 1: PRESSING, 2: END
         x: 0,
         y: 0,
         dx: 0,
         dy: 0,
         prevX: 0,
         prevY: 0,
+        get phase() {
+          return _phases[this._phase];
+        },
+        _phase: -1, // 0: START, 1: PRESSING, 2: END
       };
     }, 16);
 
@@ -130,6 +144,7 @@ export default class Input {
       this._element.focus();
 
       // handle mouse button
+      let btn = '';
       switch (event.button) {
         // left mouse down
         case 0:
@@ -137,6 +152,7 @@ export default class Input {
           if (this._mouse.left !== KEY_PRESSING) {
             this._mouse.left = KEY_DOWN;
           }
+          btn = 'left';
           break;
 
         // middle mouse down
@@ -145,6 +161,7 @@ export default class Input {
           if (this._mouse.middle !== KEY_PRESSING) {
             this._mouse.middle = KEY_DOWN;
           }
+          btn = 'middle';
           break;
 
         // right mouse down
@@ -153,8 +170,11 @@ export default class Input {
           if (this._mouse.right !== KEY_PRESSING) {
             this._mouse.right = KEY_DOWN;
           }
+          btn = 'right';
           break;
       }
+
+      this._mousedowns.push(btn);
     };
 
     // mouseup
@@ -169,22 +189,28 @@ export default class Input {
       this._mouse.prevY = this._mouse.y = this._calcOffsetY(event.clientY);
 
       // handle mouse button
+      let btn = '';
       switch (event.button) {
         // left mouse up
         case 0:
           this._mouse.left = KEY_UP;
+          btn = 'left';
           break;
 
         // middle mouse up
         case 1:
           this._mouse.middle = KEY_UP;
+          btn = 'middle';
           break;
 
         // right mouse up
         case 2:
           this._mouse.right = KEY_UP;
+          btn = 'right';
           break;
       }
+
+      this._mouseups.push(btn);
     };
 
     // mouseenter
@@ -223,6 +249,7 @@ export default class Input {
       if (this._keyboard[event.key] !== KEY_PRESSING) {
         this._keyboard[event.key] = KEY_DOWN;
       }
+      this._keydowns.push(event.key);
     };
 
     // keyup
@@ -230,6 +257,7 @@ export default class Input {
       event.stopPropagation();
 
       this._keyboard[event.key] = KEY_UP;
+      this._keyups.push(event.key);
     };
 
     // touchstart
@@ -237,9 +265,10 @@ export default class Input {
       event.preventDefault();
 
       for (let i = 0; i < event.changedTouches.length; i++) {
+        let touchID = event.changedTouches[i].identifier;
         let touch = this._touches.add();
-        touch.id = event.changedTouches[i].identifier;
-        touch.phase = TOUCH_START;
+        touch.id = touchID;
+        touch._phase = TOUCH_START;
         touch.x = this._calcOffsetX(event.changedTouches[i].clientX);
         touch.y = this._calcOffsetY(event.changedTouches[i].clientY);
         touch.dx = 0;
@@ -255,8 +284,9 @@ export default class Input {
 
       for (let i = 0; i < this._touches.length; i++) {
         for (let j = 0; j < event.changedTouches.length; j++) {
-          if (this._touches.data[i].id === event.changedTouches[j].identifier) {
-            this._touches.data[i].phase = TOUCH_PRESSING;
+          let touchID = event.changedTouches[j].identifier;
+          if (this._touches.data[i].id === touchID) {
+            this._touches.data[i]._phase = TOUCH_PRESSING;
             this._touches.data[i].x = this._calcOffsetX(event.changedTouches[j].clientX);
             this._touches.data[i].y = this._calcOffsetY(event.changedTouches[j].clientY);
             this._touches.data[i].dx = this._touches.data[i].x - this._touches.data[i].prevX;
@@ -272,8 +302,9 @@ export default class Input {
 
       for (let i = 0; i < this._touches.length; i++) {
         for (let j = 0; j < event.changedTouches.length; j++) {
-          if (this._touches.data[i].id === event.changedTouches[j].identifier) {
-            this._touches.data[i].phase = TOUCH_END;
+          let touchID = event.changedTouches[j].identifier;
+          if (this._touches.data[i].id === touchID) {
+            this._touches.data[i]._phase = TOUCH_END;
             this._touches.data[i].prevX = this._touches.data[i].x = this._calcOffsetX(event.changedTouches[j].clientX);
             this._touches.data[i].prevY = this._touches.data[i].y = this._calcOffsetY(event.changedTouches[j].clientY);
             this._touches.data[i].dx = 0;
@@ -289,8 +320,9 @@ export default class Input {
 
       for (let i = 0; i < this._touches.length; i++) {
         for (let j = 0; j < event.changedTouches.length; j++) {
-          if (this._touches.data[i].id === event.changedTouches[j].identifier) {
-            this._touches.data[i].phase = TOUCH_CANCEL;
+          let touchID = event.changedTouches[j].identifier;
+          if (this._touches.data[i].id === touchID) {
+            this._touches.data[i]._phase = TOUCH_CANCEL;
             this._touches.data[i].prevX = this._touches.data[i].x = this._calcOffsetX(event.changedTouches[j].clientX);
             this._touches.data[i].prevY = this._touches.data[i].y = this._calcOffsetY(event.changedTouches[j].clientY);
             this._touches.data[i].dx = 0;
@@ -525,6 +557,34 @@ export default class Input {
   }
 
   /**
+   * @property {boolean} hasKeyDown
+   */
+  get hasKeyDown() {
+    return this._keydowns.length > 0;
+  }
+
+  /**
+   * @property {boolean} hasKeyUp
+   */
+  get hasKeyUp() {
+    return this._keyups.length > 0;
+  }
+
+  /**
+   * @property {boolean} hasMouseDown
+   */
+  get hasMouseDown() {
+    return this._mousedowns.length > 0;
+  }
+
+  /**
+   * @property {boolean} hasMouseUp
+   */
+  get hasMouseUp() {
+    return this._mouseups.length > 0;
+  }
+
+  /**
    * @method getTouchInfo
    * @param {number} idx
    */
@@ -539,6 +599,11 @@ export default class Input {
    * NOTE: you should call this at the end of your frame.
    */
   reset() {
+    this._keydowns.reset();
+    this._keyups.reset();
+    this._mousedowns.reset();
+    this._mouseups.reset();
+
     // update mouse states
     this._mouse.prevX = this._mouse.x;
     this._mouse.prevY = this._mouse.y;
@@ -583,10 +648,10 @@ export default class Input {
       this._touches.data[i].prevY = this._touches.data[i].y;
       this._touches.data[i].dx = 0;
       this._touches.data[i].dy = 0;
-      if (this._touches.data[i].phase === TOUCH_START) {
-        this._touches.data[i].phase = TOUCH_PRESSING;
+      if (this._touches.data[i]._phase === TOUCH_START) {
+        this._touches.data[i]._phase = TOUCH_PRESSING;
       }
-      if (this._touches.data[i].phase === TOUCH_END || this._touches.data[i].phase === TOUCH_CANCEL) {
+      if (this._touches.data[i]._phase === TOUCH_END || this._touches.data[i]._phase === TOUCH_CANCEL) {
         this._touches.remove(i);
       }
     }
