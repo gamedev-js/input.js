@@ -63,7 +63,7 @@ suite(tap, 'input', t => {
       t.equal(input.keydown('b'), true);
       input.reset();
       t.equal(input.keypress('b'), true);
-      
+
       t.end();
     }, 100);
   });
