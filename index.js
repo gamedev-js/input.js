@@ -542,7 +542,7 @@ export default class Input {
   /**
    * @property {number} mousePrevY
    */
-  get mousePreY() {
+  get mousePrevY() {
     return this._mouse.prevY;
   }
 
