@@ -124,7 +124,11 @@ export default class Input {
 
       if (this._pointerLocked) {
         this._mouse.x += event.movementX;
-        this._mouse.y -= event.movementY;
+        if (this._opts.invertY) {
+          this._mouse.y -= event.movementY;
+        } else {
+          this._mouse.y += event.movementY;
+        }
       } else {
         this._mouse.x = this._calcOffsetX(event.clientX);
         this._mouse.y = this._calcOffsetY(event.clientY);
