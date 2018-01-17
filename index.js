@@ -30,6 +30,7 @@ export default class Input {
    * @method constructor
    * @param {HTMLElement} [element]
    * @param {object} [opts]
+   * @param {boolean} [opts.enabled] - enable input. default is true
    * @param {boolean} [opts.lock] - lock cursor when mouse down. default is false.
    * @param {boolean} [opts.useMask] - use drag mask (for prevent cursor changes).
    * @param {string} [opts.maskCursor] - the cursor for drag mask.
@@ -50,16 +51,43 @@ export default class Input {
       _dragMask.oncontextmenu = function () { return false; };
     }
 
-    this._opts = opts;
     this._element = element || document.body;
-    this._globalEventInstalled = false;
 
+    // setup options
+
+    this._enabled = true;
+    if (opts.enabled !== undefined) {
+      this._enabled = opts.enabled;
+    }
+
+    this._lock = false;
+    if (opts.lock !== undefined) {
+      this._lock = opts.lock;
+    }
+
+    this._useMask = false;
+    if (opts.useMask !== undefined) {
+      this._useMask = opts.useMask;
+    }
+
+    this._maskCursor = 'default';
+    if (opts.maskCursor !== undefined) {
+      this._maskCursor = opts.maskCursor;
+    }
+
+    this._invertY = false;
+    if (opts.invertY !== undefined) {
+      this._invertY = opts.invertY;
+    }
+
+    //
     let ua = navigator.userAgent.toLowerCase();
     if (/mobile|android|iphone|ipad|phone/i.test(ua)) {
       this._hasTouch = true;
     }
 
     // mouse internal states
+    this._globalEventInstalled = false;
     this._pointerLocked = false;
     this._mouseGrabbed = false;
 
@@ -124,7 +152,7 @@ export default class Input {
 
       if (this._pointerLocked) {
         this._mouse.x += event.movementX;
-        if (this._opts.invertY) {
+        if (this._invertY) {
           this._mouse.y -= event.movementY;
         } else {
           this._mouse.y += event.movementY;
@@ -150,8 +178,8 @@ export default class Input {
       event.preventDefault();
       event.stopPropagation();
 
-      if (this._opts.lock) {
-        this._lock(true);
+      if (this._lock) {
+        this._lockPointer(true);
       }
 
       this._installGlobalEvents();
@@ -373,7 +401,9 @@ export default class Input {
       event.stopPropagation();
     };
 
-    this._registerEvents();
+    if (this._enabled) {
+      this._registerEvents();
+    }
   }
 
   destroy() {
@@ -419,8 +449,8 @@ export default class Input {
     document.addEventListener('mousemove', this._mousemoveHandle);
     document.addEventListener('mousewheel', this._mousewheelHandle, { passive: true });
 
-    if (this._opts.useMask) {
-      _dragMask.style.cursor = this._opts.maskCursor || 'default';
+    if (this._useMask) {
+      _dragMask.style.cursor = this._maskCursor || 'default';
       document.body.appendChild(_dragMask);
     }
 
@@ -442,7 +472,7 @@ export default class Input {
     }
 
     // unlock mouse here
-    this._lock(false);
+    this._lockPointer(false);
 
     // if we are grabbing mouse, skip it
     if (this._mouseGrabbed) {
@@ -453,7 +483,7 @@ export default class Input {
     document.removeEventListener('mousemove', this._mousemoveHandle);
     document.removeEventListener('mousewheel', this._mousewheelHandle, { passive: true });
 
-    if (this._opts.useMask) {
+    if (this._useMask) {
       _dragMask.remove();
     }
 
@@ -461,7 +491,7 @@ export default class Input {
   }
 
   // NOTE: in web-browser, requestPointerLock only works in mousedown event
-  _lock(locked) {
+  _lockPointer(locked) {
     if (locked) {
       if (this._pointerLocked) {
         return;
@@ -490,11 +520,32 @@ export default class Input {
   }
 
   _calcOffsetY (clientY) {
-    if (this._opts.invertY) {
+    if (this._invertY) {
       return this._bcr.height - (clientY - this._bcr.top);
     }
 
     return clientY - this._bcr.top;
+  }
+
+  /**
+   * @property {boolean} enabled
+   */
+  get enabled() {
+    return this._enabled;
+  }
+  set enabled(val) {
+    if (this._enabled !== val) {
+      this._enabled = val;
+
+      if (this._enabled) {
+        this._registerEvents();
+        if (this._mouseGrabbed) {
+          this._installGlobalEvents();
+        }
+      } else {
+        this.destroy();
+      }
+    }
   }
 
   /**
@@ -662,6 +713,10 @@ export default class Input {
    * NOTE: you should call this at the end of your frame.
    */
   reset() {
+    if (this._enabled === false) {
+      return;
+    }
+
     // update mouse states
     this._mouse.prevX = this._mouse.x;
     this._mouse.prevY = this._mouse.y;
@@ -739,6 +794,11 @@ export default class Input {
    */
   grabMouse(grabbed) {
     this._mouseGrabbed = grabbed;
+
+    // NOTE: we can mark mouse grabbed, but don't register events for it.
+    if (this._enabled === false) {
+      return;
+    }
 
     if (grabbed) {
       this._installGlobalEvents();
