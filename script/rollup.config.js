@@ -7,7 +7,7 @@ const pjson = require('../package.json');
 let banner = `
 /*
  * ${pjson.name} v${pjson.version}
- * (c) ${new Date().getFullYear()} @Johnny Wu
+ * (c) ${new Date().getFullYear()} @gamedev-js
  * Released under the MIT License.
  */
 `;
