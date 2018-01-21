@@ -29,4 +29,3 @@ profile
 node_modules
 bower_components
 dist
-yarn.lock
